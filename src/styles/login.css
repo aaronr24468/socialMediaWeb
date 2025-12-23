@@ -1,0 +1,186 @@
+.mainContaner {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .container {
+        width: 100%;
+        height: 100%;
+        border: 1px solid black;
+        display: flex;
+        align-items: center;
+        flex-flow: row;
+
+
+        .box {
+            width: 70%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('../assets/backLogin2.jpg'), no-repeat;
+            background-size: cover;
+            color: white;
+            flex-flow: column;
+            gap: 10px;
+            text-shadow: 0 0 5px black;
+            font-family: sans-serif;
+            text-align: center;
+            font-family: local;
+
+            p {
+                text-align: center;
+                font-size: 1.1rem;
+            }
+        }
+
+        .box2 {
+            width: 30%;
+            height: 100%;
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: center;
+            font-family: sans-serif;
+            padding: 150px 120px 150px 120px;
+            gap: 10px;
+            text-align: center;
+            font-family: local;
+
+            .welcomeLogin{
+                text-decoration: underline black 1px;
+                font-size: 2rem;
+                user-select: none;
+            }
+
+            .registerP{
+                font-size: 1rem;
+                user-select: none;
+                
+                a{
+                    color: blue;
+                    text-decoration: none;
+                    opacity: 0.4;
+                    cursor: pointer;
+                    transition: opacity 0.3s linear;
+
+                    &:hover{
+                        opacity: 1;
+                    }
+                }
+            }
+
+            .dataInput {
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                gap: 30px;
+
+                .containerInputs {
+                    width: 100%;
+                    height: auto;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-flow: column;
+                    gap: 30px;
+
+                    .dataC {
+                        width: 300px;
+                        border-bottom: 2px solid black;
+                        border-radius: 10px;
+                        padding: 5px;
+                        display: flex;
+                        position: relative;
+                        transition: transform 0.3s ease;
+
+                        input {
+                            width: 100%;
+                            border: none;
+                            padding: 0 15px 0 5px;
+                            font-size: 1.1rem;
+                            outline: none;
+                            font-family: local;
+                        }
+
+                        .eye {
+                            width: 25px;
+                            position: absolute;
+                            right: 10px;
+                            top: 5px;
+                            cursor: pointer;
+                            opacity: 0.3;
+                            transition: opacity 0.2s linear;
+
+                            &:hover{
+                                opacity: 1;
+                            }
+                        }
+
+                        &:hover {
+                            transform: scale(1.1);
+                        }
+                    }
+                }
+
+                .submitBtn{
+                    width: 100px;
+                    aspect-ratio: 2;
+                    background: none;
+                    border: none;
+                    box-shadow: 0 2px 3px black,
+                                0 10px 5px;
+                    border-radius: 10px;
+                    position: relative;
+                    overflow: hidden;
+                    font-size: 1rem;
+                    cursor: pointer;
+                    font-family: local;
+                    transition: transform 0.02s linear;
+
+                    &::before{
+                        content: '';
+                        width: 100%;
+                        height: 100%;
+                        background: linear-gradient(90deg,rgba(51, 51, 156, 1) 0%, rgba(159, 159, 212, 1) 35%, rgba(213, 225, 227, 1) 100%);
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        z-index: -1;
+                        transform: translateX(-100%);
+                        transition: transform 0.2s linear;
+                    }
+
+                    &:hover::before{
+                        transform: translateX(0%);
+                    }
+
+                    &:active{
+                        transform: translateY(2px);
+                    }
+                }
+            }
+
+            .forgot{
+                font-weight: 200;
+
+                a{
+                    text-decoration: none;
+                    color: blue;
+                    opacity: 0.4;
+                    transition: opacity 0.2s linear;
+
+                    &:hover{
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+}

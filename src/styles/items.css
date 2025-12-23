@@ -1,0 +1,170 @@
+.items {
+    width: 100%;
+    height: 94vh;
+    border: 1px solid rgba(255, 255, 255, 0.347);
+    background: rgba(255, 255, 255, 0.466);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+
+
+
+
+    .itemsBox {
+        width: 100%;
+        height: 91vh;
+
+
+        .boxI {
+            width: 100%;
+            height: 92vh;
+            display: grid;
+            grid-template-columns: auto;
+            grid-template-rows: auto;
+            grid-auto-flow: row;
+            overflow-y: scroll;
+            scrollbar-width: none;
+            scroll-snap-type: y mandatory;
+            
+
+            .item {
+                width: 100%;
+                height: 92vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                font-family: 'local';
+                scroll-snap-align: start;
+                overflow: hidden;
+
+                .photoS {
+                    width: 100%;
+                    height: 92vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                    }
+
+                    .imageItem {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                    }
+                }
+
+                .interactionUser {
+                    width: 100%;
+                    height: 100px;
+                    position: absolute;
+                    bottom: -100%;
+                    background: rgba(255, 255, 255, 0.371);
+                    display: flex;
+                    flex-wrap: nowrap;
+                    transition: bottom 0.5s ease-in-out;
+
+                    .info {
+                        width: 50%;
+                        height: 100%;
+                        padding: 10px;
+                        color: white;
+                        text-shadow: 0 0 3px black;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 5px;
+                        justify-content: center;
+
+                        .userP {
+                            width: 100%;
+                            height: auto;
+                            user-select: none;
+
+                            span {
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                                font-size: 1.3rem;
+
+
+                                img {
+                                    width: 45px;
+                                    aspect-ratio: 1;
+                                    border-radius: 50%;
+                                }
+                            }
+                        }
+
+                        p {
+                            font-size: 0.9rem;
+                        }
+                    }
+
+                    .interaction {
+                        width: 50%;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        gap: 20px;
+                        justify-content: flex-end;
+                        position: relative;
+                        padding: 0 50px 0 0;
+
+                        .btnInteration {
+                            width: 50px;
+                            aspect-ratio: 1;
+                            background: none;
+                            border: none;
+                            transition: transform 0.2s ease;
+
+                            .heartBtn {
+                                width: 40px;
+                                aspect-ratio: 1;
+                                color: rgb(255, 255, 255);
+                                filter: drop-shadow(1px 1px 2px black);
+                                cursor: pointer;
+                            }
+
+                            img {
+                                width: 40px;
+                                cursor: pointer;
+                            }
+
+                            &:hover {
+                                transform: scale(1.1);
+                            }
+                        }
+
+                        .btnComments{
+                            position: relative;
+
+                            .commentsContainer{
+                                position: absolute;
+                                top: -420px;
+                                display: none;
+                                right: 0;
+                                width: 350px;
+                                height: 400px;
+                                box-shadow: 0 0 5px black;
+                            }
+                        }
+
+                        
+                    }
+
+                    
+                }
+
+                &:hover>.interactionUser {
+                    bottom: 0px;
+                }
+            }
+        }
+    }
+
+}

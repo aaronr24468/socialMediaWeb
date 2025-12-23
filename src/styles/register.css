@@ -1,0 +1,193 @@
+.mainRegister {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(45deg,rgba(176, 107, 232, 1) 0%, rgba(108, 64, 219, 1) 100%);
+
+    .RegisterContainer {
+        width: 800px;
+        height: auto;
+        border: 1px solid black;
+        box-shadow: 0 0 3px black,
+                    5px 5px 10px black;
+        background: rgba(255, 255, 255, 0.546);
+        border-radius: 5px;
+        display: grid;
+        grid-template-areas:
+            "leftR rightR"
+            "date date";
+        gap: 20px;
+        padding: 20px;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 250px 250px;
+        grid-auto-rows: auto;
+        font-family: local;
+
+
+        .register {
+            padding: 20px;
+        }
+
+        .leftR {
+            grid-area: leftR;
+
+            .leftBox {
+                display: flex;
+                flex-flow: column;
+                height: 50%;
+                width: 100%;
+                align-items: flex-start;
+                justify-content: center;
+                
+                span{
+                    font-size: 1.3rem;
+                }
+                input{
+                    width: 100%;
+                    height: 40px;
+                    border-radius: 10px;
+                    border: 1px solid rgba(0, 0, 0, 0.39);
+                    padding: 0 5px 0 5px;
+                    font-size: 1.1rem;
+                    font-family: local;
+                }
+
+            }
+        }
+
+        .rightR {
+            grid-area: rightR;
+            .rightBox {
+                display: flex;
+                flex-flow: column;
+                height: 50%;
+                width: 100%;
+                align-items: flex-start;
+                justify-content: center;
+                position: relative;
+
+                span{
+                    font-size: 1.3rem;
+                }
+                input{
+                    width: 100%;
+                    height: 40px;
+                    border-radius: 10px;
+                    border: 1px solid rgba(0, 0, 0, 0.39);
+                    padding: 0 5px 0 5px;
+                    font-size: 1.1rem;
+                    font-family: local;
+                }
+                .btnEyeShow{
+                    width: 30px;
+                    position: absolute;
+                    bottom: 25px;
+                    right: 10px;
+                    z-index: 10000;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .date {
+            grid-area: date;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-flow: column;
+
+            .dateBox{
+                width: 100%;
+                height: auto;
+                padding: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+
+                input{
+                    text-align: center;
+                    height: 30px;
+                    width: 33.33%;
+                    border: 1px solid rgba(0, 0, 0, 0.39);
+                    border-radius: 10px;
+                    font-size: 1.1rem;
+                    font-family: local;
+                }
+            }
+
+            .uploadPhoto{
+                width: 100%;
+                height: auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .uploadLabel{
+                    cursor: pointer;
+                    transition: transform 0.2s linear;
+                    .imageUpload{
+                        width: 100px;
+                    }
+
+                    &:hover{
+                        transform: scale(1.1);
+                    }
+                    &:active{
+                        transform: scale(1);
+                    }
+                }
+
+                .inputP{
+                    display: none;
+                }
+            }
+
+            .btnRegister{
+                width: 150px;
+                aspect-ratio: 4;
+                border: none;
+                background: none;
+                box-shadow: 0 0 5px black;
+                border-radius: 10px;
+                position: relative;
+                overflow: hidden;
+                z-index: 10;
+                cursor: pointer;
+                font-size: 1rem;
+                font-family: local;
+
+                &::before{
+                    content: '';
+                    width: 300%;
+                    height: 100%;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    bottom: 0;
+                    right: 0;
+                    margin: auto;
+                    background: linear-gradient(90deg,rgb(90, 169, 173) 0%, rgba(58, 231, 240, 1) 50%, rgb(98, 171, 176) 100%);
+                    transform: translateX(-50%);
+                    animation: lightning 2s linear infinite;
+                    z-index: -1;
+                }
+            }
+        }
+    }
+}
+
+
+@keyframes lightning {
+    0%{
+       transform: translateX(-50%); 
+    }
+    50%{
+        transform: translateX(0%); 
+    }
+    100%{
+        transform: translateX(-50%);
+    }
+}
