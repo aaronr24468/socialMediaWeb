@@ -4,7 +4,7 @@ import comments from '../assets/comments.svg'
 
 export const Items = ({ content, contentSelect }) => {
     const token = localStorage.getItem('tokenSocial')
-    console.log(content)
+    //console.log(content)
 
 
     const likeContent = async (event) => {
@@ -44,6 +44,7 @@ export const Items = ({ content, contentSelect }) => {
         <>
             <div className="items">
 
+                {/* Photo section */}
                 <section className='itemsBox showPhotos' id='showPhotosItem'>
                     <li className='boxI'>
                         {content.map((element, index) => {
@@ -79,15 +80,19 @@ export const Items = ({ content, contentSelect }) => {
                         })}
                     </li>
                 </section>
+
+                {/* Video section */}
                 <section className='itemsBox showVideo' id='showVideoItem'>
                     <li className='boxI'>
                         {content.map((element, index) => {
                             return (
                                 <ul className='item' key={index}>
                                     <input type="hidden" defaultValue={element.id} />
+
                                     <section className="photoS">
-                                        <video className='imageItem' controls preload='auto' src={element.video}></video>
+                                        <video id='imageItem' className='imageItem' controls preload='auto' src={element.video}></video>
                                     </section>
+
                                     <section className="interactionUser">
                                         <div className="info">
                                             <div className="userP">

@@ -16,21 +16,67 @@ import { Items } from './items';
 
 
 export const MainSocialMedia = ({ }) => {
-    const ws = new WebSocket('ws://localhost:8181')
+    const socket = new WebSocket('ws://localhost:8181')
     const navigate = useNavigate();
     const user = localStorage.getItem('socialUser');
     const userImage = localStorage.getItem('socialImageUser');
+
     const [select, setSelect] = useState(null);
     const [contentSelect, setContentSelect] = useState('photos');
     const [content, setContent] = useState([])
 
-    ws.addEventListener('open', () => {
-        ws.send(JSON.stringify({
+
+    socket.addEventListener('open', () => {
+        socket.send(JSON.stringify({
             "type": "join",
             "name": user,
             "image": userImage
         }))
     })
+
+    socket.addEventListener('message', (msg) => {
+        const usersChat = JSON.parse(msg.data) // convertimos el json que manda webSocket a un objeto manipulable
+        //console.log(usersChat)
+
+        switch (usersChat.type) {
+            case "join":
+                document.querySelector('.containertChat').innerHTML = ' '; //limpiamos para que cada vez que se actualize muestre los usuarios conectados
+                //console.log(usersChat.names.length)
+                const filterData = usersChat.names.filter((element) => { //filtramos para que no salga mi mismo usuario conectado
+                    return (element != user)
+                })
+                //console.log(usersChat.names.length)
+                //if (usersChat.names.length > 1) {
+                    filterData.forEach((element, id) => { //creamos un forEach para ciclar el arr filtrado y a cada elemento del array crearle su contenedor
+                        const userBox = document.createElement('div');
+                        const imageBox = document.innerHTML = `<img src="${usersChat.imageUsers[element]}"/>` //creamos un tag de img y le ponemos la imagen que corresponde por el nombre
+
+                        userBox.classList.add('recipient');
+                        userBox.setAttribute('userName', element)
+
+                        userBox.onclick = async function() {
+                            document.getElementById('chatUsersContainer').style.display = 'flex'
+                            document.querySelector('.userRecieve').innerText = element
+                            
+                        }
+
+                        userBox.innerText = element;
+                        document.querySelector('.containertChat').appendChild(userBox)
+                        userBox.innerHTML += imageBox
+                    })
+                //}
+
+                break;
+
+            case "msg":
+                
+                break;
+        }
+    })
+
+    const sendMessage = (event) =>{
+        event.preventDefault();
+    }
 
     const searching = (event) => {
         event.preventDefault();
@@ -43,24 +89,26 @@ export const MainSocialMedia = ({ }) => {
         }
     }
 
-    const getContent = useCallback(async()=>{
+    const getContent = useCallback(async () => {
         try {
-            console.log(contentSelect)
-            const response = await fetch(`http://localhost:8080/v1/social/getContent/${contentSelect}`,{
+            //console.log(contentSelect)
+            const response = await fetch(`http://localhost:8080/v1/social/getContent/${contentSelect}`, {
                 method: 'get',
-                headers:{
-                    "Content-Type":"Application/json",
-                    "Authorization":`bearer ${localStorage.getItem('tokenSocial')}`
+                headers: {
+                    "Content-Type": "Application/json",
+                    "Authorization": `bearer ${localStorage.getItem('tokenSocial')}`
                 }
             }).then((res) => res.json());
-            console.log(response)
+            //console.log(response)
             const res = response.reverse();
             setContent(res)
         } catch (error) {
-            
+
         }
-        
+
     }, [contentSelect])
+
+
 
     const closeUpload = () => {
         document.getElementById('contentInformation').style.display = "none"
@@ -72,7 +120,7 @@ export const MainSocialMedia = ({ }) => {
     }
 
     const logOut = () => {
-        ws.send(JSON.stringify({
+        socket.send(JSON.stringify({
             "type": "logout",
             "name": user
         }));
@@ -87,7 +135,7 @@ export const MainSocialMedia = ({ }) => {
         const token = localStorage.getItem('tokenSocial')
         token === null ? navigate('/login') : ""
         getContent();
-    },[getContent])
+    }, [getContent])
 
     return (
         <>
@@ -143,6 +191,31 @@ export const MainSocialMedia = ({ }) => {
                 {/* -------------------------------------------------------------- CHAT ------------------------------------------------------------- */}
                 <aside className='rightContent'>
 
+                    <section className='containertChat'>
+
+                    </section>
+                    <section className="chatUsersContainer" id='chatUsersContainer'>
+                        <div className="mainChatContainer">
+                            <button className='closeChat' onClick={(event) => document.getElementById('chatUsersContainer').style.display = "none"}>-</button>
+                            <div className="showMessage">
+
+                                <section className="userSelected">
+                                    <span className='userRecieve'>Name</span>
+                                </section>
+
+                                <section className="msg">
+
+                                </section>
+
+                                <form onSubmit={sendMessage} className='writeMessage' action="">
+                                    <span>{user}:</span>
+                                    <input type="text" placeholder='Write'/>
+                                    <button type='submit'>send</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </section>
 
                 </aside>
 
@@ -159,11 +232,11 @@ export const MainSocialMedia = ({ }) => {
                     <section className='showMedia' id='showMedia'>
                         <div className="containerMedia">
                             <section className="selectC">
-                                <button onClick={() => setContentSelect('photos')} className='btnC photosC'><img onClick={() => setContentSelect('photos')} src={imageSelect} alt="" /></button>
+                                <button onClick={() => { setContentSelect('photos'), document.getElementById('imageItem').pause(); }} className='btnC photosC'><img onClick={() => setContentSelect('photos')} src={imageSelect} alt="" /></button>
                                 <button onClick={() => setContentSelect('videos')} className='btnC videoC'><img onClick={() => setContentSelect('videos')} src={videoSelect} alt="" /></button>
                             </section>
                             {/* empezar con el componente para obtener el contenido */}
-                            <Items content={content} contentSelect={contentSelect}/> 
+                            <Items content={content} contentSelect={contentSelect} />
                         </div>
                     </section>
                 </main>

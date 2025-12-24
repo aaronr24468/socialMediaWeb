@@ -9,6 +9,7 @@ export const LoginComponent = ({ }) => {
 
     //creamos un metodo el cual nos le asignaremos el onSubmit para obtener los datos del usuario y pedir el token de la cuenta
     const setLogin = async(event) => {
+
         event.preventDefault();
         const data = {
             username: event.target[0].value,
@@ -22,7 +23,9 @@ export const LoginComponent = ({ }) => {
             },
             body: JSON.stringify(data)
         }).then((res) => res.json())
-        console.log(token)
+        
+        //console.log(token)
+
         if(token != "F"){
             const user = await fetch('http://localhost:8080/v1/social/getUser',{
                 method: 'get',
@@ -31,7 +34,7 @@ export const LoginComponent = ({ }) => {
                     "Authorization": `bearer ${token}`
                 }
             }).then((res) => res.json());
-            console.log(user)
+            //console.log(user)
             localStorage.setItem('tokenSocial', token);
             localStorage.setItem('socialUser', user.username);
             localStorage.setItem('socialImageUser', user.image);
@@ -43,7 +46,7 @@ export const LoginComponent = ({ }) => {
 
     useEffect(() =>{
         const token = localStorage.getItem('tokenSocial')
-        console.log(token)
+        //console.log(token)
         if(token != null){
             navigate('/SocialMedia')
         }
