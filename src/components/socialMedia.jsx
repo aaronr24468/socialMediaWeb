@@ -37,7 +37,7 @@ export const MainSocialMedia = ({ }) => {
     socket.addEventListener('message', (msg) => {
         const usersChat = JSON.parse(msg.data) // convertimos el json que manda webSocket a un objeto manipulable
         //console.log(usersChat)
-
+        
         switch (usersChat.type) {
             case "join":
                 document.querySelector('.containertChat').innerHTML = ' '; //limpiamos para que cada vez que se actualize muestre los usuarios conectados
@@ -47,35 +47,57 @@ export const MainSocialMedia = ({ }) => {
                 })
                 //console.log(usersChat.names.length)
                 //if (usersChat.names.length > 1) {
-                    filterData.forEach((element, id) => { //creamos un forEach para ciclar el arr filtrado y a cada elemento del array crearle su contenedor
-                        const userBox = document.createElement('div');
-                        const imageBox = document.innerHTML = `<img src="${usersChat.imageUsers[element]}"/>` //creamos un tag de img y le ponemos la imagen que corresponde por el nombre
+                filterData.forEach((element, id) => { //creamos un forEach para ciclar el arr filtrado y a cada elemento del array crearle su contenedor
+                    const userBox = document.createElement('div');
+                    const imageBox = document.innerHTML = `<img src="${usersChat.imageUsers[element]}"/>` //creamos un tag de img y le ponemos la imagen que corresponde por el nombre
 
-                        userBox.classList.add('recipient');
-                        userBox.setAttribute('userName', element)
+                    userBox.classList.add('recipient');
+                    userBox.setAttribute('userName', element)
 
-                        userBox.onclick = async function() {
-                            document.getElementById('chatUsersContainer').style.display = 'flex'
-                            document.querySelector('.userRecieve').innerText = element
-                            
-                        }
+                    userBox.onclick = async function () {
+                        document.getElementById('chatUsersContainer').style.display = 'flex'
+                        document.querySelector('.userRecieve').innerText = element
+                        document.querySelector('.msg').innerHTML = ""
 
-                        userBox.innerText = element;
-                        document.querySelector('.containertChat').appendChild(userBox)
-                        userBox.innerHTML += imageBox
-                    })
+                    }
+
+                    userBox.innerText = element;
+                    document.querySelector('.containertChat').appendChild(userBox)
+                    userBox.innerHTML += imageBox
+                })
                 //}
 
                 break;
 
             case "msg":
-                
+                console.log(usersChat)
+                if (usersChat.name === user) {
+                    const divChat = document.innerHTML = `<div class="principalUser"><span class="pricipalText">${usersChat.name}: ${usersChat.msg}</span></div>`;
+                    document.querySelector('.msg').innerHTML += divChat
+                } else {
+                    const divChat = document.innerHTML = `<div class="recieveUser"><span class="recieveText">${usersChat.name}: ${usersChat.msg}</span></div>`;
+                    document.querySelector('.msg').innerHTML += divChat
+                }
+                document.querySelector('.msg').scrollBy({top: 10000000, behavior: 'smooth'})
                 break;
         }
     })
 
-    const sendMessage = (event) =>{
+    const sendMessage = (event) => {
         event.preventDefault();
+        const msg = event.target[0].value;
+        const recieve = document.querySelector('.userRecieve').innerText;
+        const principalUser = user;
+        if (msg.length != 0) {
+            socket.send(JSON.stringify({
+                "type": "msg",
+                "name": principalUser,
+                "recieve": recieve,
+                "msg": msg
+            }))
+            document.querySelector('.sendMsg').value = '';
+            
+        }
     }
 
     const searching = (event) => {
@@ -102,6 +124,11 @@ export const MainSocialMedia = ({ }) => {
             //console.log(response)
             const res = response.reverse();
             setContent(res)
+
+            const videos = document.querySelectorAll('.videoItem');
+            videos.forEach((element) =>{
+                element.pause();
+            })
         } catch (error) {
 
         }
@@ -208,8 +235,8 @@ export const MainSocialMedia = ({ }) => {
                                 </section>
 
                                 <form onSubmit={sendMessage} className='writeMessage' action="">
-                                    <span>{user}:</span>
-                                    <input type="text" placeholder='Write'/>
+                                    <span className='principalUser'>{user}:</span>
+                                    <input className='sendMsg' type="text" placeholder='Write' />
                                     <button type='submit'>send</button>
                                 </form>
 
@@ -232,7 +259,7 @@ export const MainSocialMedia = ({ }) => {
                     <section className='showMedia' id='showMedia'>
                         <div className="containerMedia">
                             <section className="selectC">
-                                <button onClick={() => { setContentSelect('photos'), document.getElementById('imageItem').pause(); }} className='btnC photosC'><img onClick={() => setContentSelect('photos')} src={imageSelect} alt="" /></button>
+                                <button onClick={() => setContentSelect('photos')} className='btnC photosC'><img onClick={() => setContentSelect('photos')} src={imageSelect} alt="" /></button>
                                 <button onClick={() => setContentSelect('videos')} className='btnC videoC'><img onClick={() => setContentSelect('videos')} src={videoSelect} alt="" /></button>
                             </section>
                             {/* empezar con el componente para obtener el contenido */}

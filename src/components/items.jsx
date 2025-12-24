@@ -90,7 +90,7 @@ export const Items = ({ content, contentSelect }) => {
                                     <input type="hidden" defaultValue={element.id} />
 
                                     <section className="photoS">
-                                        <video id='imageItem' className='imageItem' controls preload='auto' src={element.video}></video>
+                                        <video id='imageItem' controls className='imageItem videoItem' preload='auto' src={element.video}></video>
                                     </section>
 
                                     <section className="interactionUser">

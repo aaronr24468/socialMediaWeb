@@ -57,6 +57,10 @@
                         height: 100%;
                         object-fit: contain;
                     }
+
+                    .videoItem::-webkit-media-controls-panel{
+                        display: none   ;
+                    }
                 }
 
                 .interactionUser {
