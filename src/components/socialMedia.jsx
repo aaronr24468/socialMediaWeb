@@ -26,6 +26,7 @@ export const MainSocialMedia = ({ }) => {
     const [content, setContent] = useState([])
 
 
+    // utilizamos websocket para crear un evento de abrir y mandamos el nombre de usuario y el url de la imagen para compartir a los demas usuarios conectados
     socket.addEventListener('open', () => {
         socket.send(JSON.stringify({
             "type": "join",
@@ -34,10 +35,12 @@ export const MainSocialMedia = ({ }) => {
         }))
     })
 
+    // utilizamos webSocket para crear un evento en el cual cada vez que se envie un mensaje nuevo desde la api, recibirlo e interpretar la informacion con base a el type
+
     socket.addEventListener('message', (msg) => {
         const usersChat = JSON.parse(msg.data) // convertimos el json que manda webSocket a un objeto manipulable
         //console.log(usersChat)
-        
+
         switch (usersChat.type) {
             case "join":
                 document.querySelector('.containertChat').innerHTML = ' '; //limpiamos para que cada vez que se actualize muestre los usuarios conectados
@@ -48,22 +51,52 @@ export const MainSocialMedia = ({ }) => {
                 //console.log(usersChat.names.length)
                 //if (usersChat.names.length > 1) {
                 filterData.forEach((element, id) => { //creamos un forEach para ciclar el arr filtrado y a cada elemento del array crearle su contenedor
-                    const userBox = document.createElement('div');
+
+                    const userBox = document.createElement('div'); //contenedor del usuario
                     const imageBox = document.innerHTML = `<img src="${usersChat.imageUsers[element]}"/>` //creamos un tag de img y le ponemos la imagen que corresponde por el nombre
 
-                    userBox.classList.add('recipient');
-                    userBox.setAttribute('userName', element)
+                    userBox.classList.add('recipient'); //le agregamos la clase de recipient
+                    userBox.setAttribute('userName', element) //creamos un atributo con los nombres de los usuarios por cada ciclo que de el forEach
 
-                    userBox.onclick = async function () {
-                        document.getElementById('chatUsersContainer').style.display = 'flex'
-                        document.querySelector('.userRecieve').innerText = element
-                        document.querySelector('.msg').innerHTML = ""
+                    userBox.onclick = async function () { //Creamos un evento de onclick al contenedor del usuario
+                        document.getElementById('chatUsersContainer').style.display = 'flex' //cambiamos el display al elemento para que aparesca cuando demos click al contenedor del usuario
+                        document.querySelector('.userRecieve').innerText = element; // agregamos el nombre del usuario en el contenedor del chat para saber a quien le enviamos mensaje
+                        document.querySelector('.msg').innerHTML = ""; //limpiamos el contenedor de los mensajes para que no aparescan si damos click a otros usuarios
+
+                        const user1 = user;
+                        const user2 = userBox.getAttribute('userName');
+
+                        const userChat = await fetch('http://localhost:8080/v1/social/getMessage', {
+                            method: "post",
+                            headers: {
+                                "Content-Type": "Application/json",
+                                "Authorization": `bearer ${localStorage.getItem('tokenSocial')}`
+                            },
+                            body: JSON.stringify({ user1, user2 })
+                        }).then((res) => res.json());
+
+                        if (userChat != "EMPTY") {
+                            userChat.forEach((element) => {
+                                const textUser = element.split("~")
+                                const replaceL = textUser[1].replace(/[|]/g, " ");
+                                textUser[1] = replaceL
+
+                                if (textUser[0] === user) {
+                                    const divChat = document.innerHTML = `<div class="principalUser"><span class="pricipalText">${textUser[0]}: ${textUser[1]}</span></div>`;
+                                    document.querySelector('.msg').innerHTML += divChat
+                                } else {
+                                    const divChat = document.innerHTML = `<div class="recieveUser"><span class="recieveText">${textUser[0]}: ${textUser[1]}</span></div>`;
+                                    document.querySelector('.msg').innerHTML += divChat
+                                }
+                                document.querySelector('.msg').scrollBy({ top: 10000000, behavior: 'smooth' })
+                            })
+                        }
 
                     }
 
-                    userBox.innerText = element;
-                    document.querySelector('.containertChat').appendChild(userBox)
-                    userBox.innerHTML += imageBox
+                    userBox.innerText = element; //le agregamos el nombre del usuario que nos de el forEach a contenedor de usuario
+                    document.querySelector('.containertChat').appendChild(userBox) //le agregamos el elemento contenedor de usuario al contenedor de chats
+                    userBox.innerHTML += imageBox; //le agregamos el elemento de la imagen del usuario al contenedor de usuario
                 })
                 //}
 
@@ -78,25 +111,53 @@ export const MainSocialMedia = ({ }) => {
                     const divChat = document.innerHTML = `<div class="recieveUser"><span class="recieveText">${usersChat.name}: ${usersChat.msg}</span></div>`;
                     document.querySelector('.msg').innerHTML += divChat
                 }
-                document.querySelector('.msg').scrollBy({top: 10000000, behavior: 'smooth'})
+                document.querySelector('.msg').scrollBy({ top: 10000000, behavior: 'smooth' })
                 break;
         }
     })
 
-    const sendMessage = (event) => {
+    const sendMessage = async (event) => {
         event.preventDefault();
+
         const msg = event.target[0].value;
         const recieve = document.querySelector('.userRecieve').innerText;
         const principalUser = user;
+
+        const msgSave = {
+            user1: principalUser,
+            user2: recieve,
+            msg: msg
+        }
+
         if (msg.length != 0) {
-            socket.send(JSON.stringify({
-                "type": "msg",
-                "name": principalUser,
-                "recieve": recieve,
-                "msg": msg
-            }))
+
+            const response = await fetch('http://localhost:8080/v1/social/saveMessage', {
+                method: 'post',
+                headers: {
+                    "Content-Type": "Application/json",
+                    "Authorization": `bearer ${localStorage.getItem('tokenSocial')}`
+                },
+                body: JSON.stringify(msgSave)
+            }).then((res) => res.json())
+
+            if (response === "S") {
+                socket.send(JSON.stringify({
+                    "type": "msg",
+                    "name": principalUser,
+                    "recieve": recieve,
+                    "msg": msg
+                }))
+            } else {
+                socket.send(JSON.stringify({
+                    "type": "msg",
+                    "name": principalUser,
+                    "recieve": recieve,
+                    "msg": 'Error con el servidor'
+                }))
+            }
+
             document.querySelector('.sendMsg').value = '';
-            
+
         }
     }
 
@@ -126,7 +187,7 @@ export const MainSocialMedia = ({ }) => {
             setContent(res)
 
             const videos = document.querySelectorAll('.videoItem');
-            videos.forEach((element) =>{
+            videos.forEach((element) => {
                 element.pause();
             })
         } catch (error) {
