@@ -11,6 +11,7 @@ import uVideo from '../assets/uploadVideo.svg'
 import uPhoto from '../assets/uploadPhoto.svg'
 import imageSelect from '../assets/imageSelect.svg'
 import videoSelect from '../assets/videoSelect.svg'
+import addFriend from '../assets/addFriend.svg'
 import { UploadContent } from './uploadContent';
 import { Items } from './items';
 
@@ -24,6 +25,7 @@ export const MainSocialMedia = ({ }) => {
     const [select, setSelect] = useState(null);
     const [contentSelect, setContentSelect] = useState('photos');
     const [content, setContent] = useState([])
+    const [listUsers, setListUsers] = useState([])
 
 
     // utilizamos websocket para crear un evento de abrir y mandamos el nombre de usuario y el url de la imagen para compartir a los demas usuarios conectados
@@ -161,12 +163,30 @@ export const MainSocialMedia = ({ }) => {
         }
     }
 
-    const searching = (event) => {
+    /*en el metodo searchin buscamos a los usuarios para agregarlos en la lista de amigos*/
+    const searching = async(event) => {
+
         event.preventDefault();
         const value = document.querySelector('.searchInput').value;
 
         if (value != "" && value != " ") {
+
             document.querySelector('.showOptions').setAttribute('show', 'true')
+            try {
+                const listUsers = await fetch('http://localhost:8080/v1/social/getListUsers',{
+
+                    method: 'post',
+                    headers:{
+                        'Content-Type':'Application/json',
+                        'Authorization':`bearer ${localStorage.getItem('tokenSocial')}`
+                    },
+                    body: JSON.stringify({value, user})
+
+                }).then((res) => res.json());
+                setListUsers(listUsers)
+            } catch (e) {
+                console.log('Something went wrong')
+            }
         } else {
             document.querySelector('.showOptions').setAttribute('show', 'false')
         }
@@ -268,8 +288,22 @@ export const MainSocialMedia = ({ }) => {
                         <button onClick={searching} className='btnSubmit' type='submit'><img src={search} alt="" /></button>
                     </form>
                     <section className='showOptions'>
-                        <div className="options">
-
+                        <div className="optionsUser">
+                            <ul className='containerListUsers'>
+                                {listUsers.map((element) =>{
+                                    return(
+                                        <li className='userList'>
+                                            <section className='userShowData'>
+                                                <img src={element.image} alt="" />
+                                                <span>{element.username}</span>
+                                            </section>
+                                            <section className='addSection'>
+                                                <button className='btnAddFriend'><img src={addFriend} alt="" /></button>
+                                            </section>
+                                        </li>
+                                    )
+                                })}
+                            </ul>
                         </div>
                     </section>
                 </header>
