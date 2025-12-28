@@ -16,8 +16,11 @@ import { UploadContent } from './uploadContent';
 import { Items } from './items';
 
 
+
+
 export const MainSocialMedia = ({ }) => {
-    const socket = new WebSocket('ws://localhost:8181')
+
+    const socket = new WebSocket('wss://localhost:8181')
     const navigate = useNavigate();
     const user = localStorage.getItem('socialUser');
     const userImage = localStorage.getItem('socialImageUser');
@@ -68,7 +71,7 @@ export const MainSocialMedia = ({ }) => {
                         const user1 = user;
                         const user2 = userBox.getAttribute('userName');
 
-                        const userChat = await fetch('http://localhost:8080/v1/social/getMessage', {
+                        const userChat = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/getMessage', {
                             method: "post",
                             headers: {
                                 "Content-Type": "Application/json",
@@ -133,7 +136,7 @@ export const MainSocialMedia = ({ }) => {
 
         if (msg.length != 0) {
 
-            const response = await fetch('http://localhost:8080/v1/social/saveMessage', {
+            const response = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/saveMessage', {
                 method: 'post',
                 headers: {
                     "Content-Type": "Application/json",
@@ -173,7 +176,7 @@ export const MainSocialMedia = ({ }) => {
 
             document.querySelector('.showOptions').setAttribute('show', 'true')
             try {
-                const listUsers = await fetch('http://localhost:8080/v1/social/getListUsers',{
+                const listUsers = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/getListUsers',{
 
                     method: 'post',
                     headers:{
@@ -195,7 +198,7 @@ export const MainSocialMedia = ({ }) => {
     const getContent = useCallback(async () => {
         try {
             //console.log(contentSelect)
-            const response = await fetch(`http://localhost:8080/v1/social/getContent/${contentSelect}`, {
+            const response = await fetch(`https://apisocialmedia-oesl.onrender.com/v1/social/getContent/${contentSelect}`, {
                 method: 'get',
                 headers: {
                     "Content-Type": "Application/json",

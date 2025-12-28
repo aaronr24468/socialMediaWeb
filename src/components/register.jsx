@@ -29,7 +29,7 @@ export const RegisterComponent = ({ }) => {
         try {
             const formData = new FormData();
             formData.append('image', image)
-            const response = await fetch('http://localhost:8080/register', {
+            const response = await fetch('https://apisocialmedia-oesl.onrender.com/register', {
                 method: 'put',
                 headers: {
                     "Content-Type": "application/json"
@@ -39,7 +39,7 @@ export const RegisterComponent = ({ }) => {
             ).then((res) => res.json());
             if (response === "S") {
                 setTimeout(async() => {
-                    const res = await fetch(`http://localhost:8080/register/setPhoto/${data.username}`, {
+                    const res = await fetch(`https://apisocialmedia-oesl.onrender.com/register/setPhoto/${data.username}`, {
                         method: 'post',
                         body: formData
                     }).then((res) => res.json());

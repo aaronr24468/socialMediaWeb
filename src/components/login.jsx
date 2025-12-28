@@ -16,7 +16,7 @@ export const LoginComponent = ({ }) => {
             password: event.target[1].value
         }
         
-        const token = await fetch('http://localhost:8080/login',{
+        const token = await fetch('https://apisocialmedia-oesl.onrender.com/login',{
             method: 'post',
             headers:{
                 "Content-Type": "Application/json"
@@ -27,7 +27,7 @@ export const LoginComponent = ({ }) => {
         //console.log(token)
 
         if(token != "F"){
-            const user = await fetch('http://localhost:8080/v1/social/getUser',{
+            const user = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/getUser',{
                 method: 'get',
                 headers:{
                     "Content-Type": "Application/json",

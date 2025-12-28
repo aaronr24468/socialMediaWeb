@@ -21,7 +21,7 @@ export const UploadContent = ({ select, closeUpload }) => {
             let succesUpload;
             if (flag === 'Video') {
                 formData.append('video', video)
-                const response = await fetch(`http://localhost:8080/v1/social/uploadVideo/${info}`, {
+                const response = await fetch(`https://apisocialmedia-oesl.onrender.com/v1/social/uploadVideo/${info}`, {
                     method: 'post',
                     headers: {
                         "Authorization": `bearer ${token}`
@@ -32,7 +32,7 @@ export const UploadContent = ({ select, closeUpload }) => {
                 setVideo('')
             } else if (flag === 'Photo') {
                 formData.append('image', photo);
-                const response = await fetch(`http://localhost:8080/v1/social/uploadPhoto/${info}`, {
+                const response = await fetch(`https://apisocialmedia-oesl.onrender.com/v1/social/uploadPhoto/${info}`, {
                     method: 'post',
                     headers: {
                         "Authorization": `bearer ${token}`
