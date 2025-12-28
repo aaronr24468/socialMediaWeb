@@ -20,7 +20,7 @@ import { Items } from './items';
 
 export const MainSocialMedia = ({ }) => {
 
-    const socket = new WebSocket('wss://localhost:8181')
+    const socket = new WebSocket("wss://apisocialmedia-oesl.onrender.com")
     const navigate = useNavigate();
     const user = localStorage.getItem('socialUser');
     const userImage = localStorage.getItem('socialImageUser');
@@ -49,7 +49,7 @@ export const MainSocialMedia = ({ }) => {
         switch (usersChat.type) {
             case "join":
                 document.querySelector('.containertChat').innerHTML = ' '; //limpiamos para que cada vez que se actualize muestre los usuarios conectados
-                //console.log(usersChat.names.length)
+                //console.log(usersChat)
                 const filterData = usersChat.names.filter((element) => { //filtramos para que no salga mi mismo usuario conectado
                     return (element != user)
                 })
@@ -108,11 +108,11 @@ export const MainSocialMedia = ({ }) => {
                 break;
 
             case "msg":
-                console.log(usersChat)
+                //console.log(usersChat)
                 if (usersChat.name === user) {
                     const divChat = document.innerHTML = `<div class="principalUser"><span class="pricipalText">${usersChat.name}: ${usersChat.msg}</span></div>`;
                     document.querySelector('.msg').innerHTML += divChat
-                } else {
+                } else if(usersChat.name === document.querySelector('.userRecieve').innerText){
                     const divChat = document.innerHTML = `<div class="recieveUser"><span class="recieveText">${usersChat.name}: ${usersChat.msg}</span></div>`;
                     document.querySelector('.msg').innerHTML += divChat
                 }

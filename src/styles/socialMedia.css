@@ -445,7 +445,7 @@
                             align-items: center;
 
                             .pricipalText {
-                                width: 50%;
+                                width: 70%;
                                 background: rgba(128, 128, 128, 0.418);
                                 height: auto;
                                 display: flex;
@@ -462,7 +462,7 @@
 
 
                             .recieveText {
-                                width: 50%;
+                                width: 70%;
                                 background: rgba(31, 236, 13, 0.418);
                                 height: auto;
                                 display: flex;
