@@ -28,24 +28,30 @@ export const MainSocialMedia = ({ }) => {
     const [select, setSelect] = useState(null);
     const [contentSelect, setContentSelect] = useState('photos');
     const [content, setContent] = useState([])
-    const [listUsers, setListUsers] = useState([])
+    const [listUsers, setListUsers] = useState([]);
+    const [login, setLogin] = useState(false)
 
 
     // utilizamos websocket para crear un evento de abrir y mandamos el nombre de usuario y el url de la imagen para compartir a los demas usuarios conectados
-    socket.addEventListener('open', () => {
-        socket.send(JSON.stringify({
-            "type": "join",
-            "name": user,
-            "image": userImage
-        }))
-    })
+    const logUserStatus = (token) => {
+        if (user != null) {
+            console.log(user)
+            socket.addEventListener('open', () => {
+                socket.send(JSON.stringify({
+                    "type": "join",
+                    "name": user,
+                    "image": userImage
+                }))
+            })
+        }
+    }
+
 
     // utilizamos webSocket para crear un evento en el cual cada vez que se envie un mensaje nuevo desde la api, recibirlo e interpretar la informacion con base a el type
 
     socket.addEventListener('message', (msg) => {
         const usersChat = JSON.parse(msg.data) // convertimos el json que manda webSocket a un objeto manipulable
         //console.log(usersChat)
-
         switch (usersChat.type) {
             case "join":
                 document.querySelector('.containertChat').innerHTML = ' '; //limpiamos para que cada vez que se actualize muestre los usuarios conectados
@@ -73,9 +79,9 @@ export const MainSocialMedia = ({ }) => {
 
                         const userChat = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/getMessage', {
                             method: "post",
+                            credentials: "include",
                             headers: {
                                 "Content-Type": "Application/json",
-                                "Authorization": `bearer ${localStorage.getItem('tokenSocial')}`
                             },
                             body: JSON.stringify({ user1, user2 })
                         }).then((res) => res.json());
@@ -112,7 +118,7 @@ export const MainSocialMedia = ({ }) => {
                 if (usersChat.name === user) {
                     const divChat = document.innerHTML = `<div class="principalUser"><span class="pricipalText">${usersChat.name}: ${usersChat.msg}</span></div>`;
                     document.querySelector('.msg').innerHTML += divChat
-                } else if(usersChat.name === document.querySelector('.userRecieve').innerText){
+                } else if (usersChat.name === document.querySelector('.userRecieve').innerText) {
                     const divChat = document.innerHTML = `<div class="recieveUser"><span class="recieveText">${usersChat.name}: ${usersChat.msg}</span></div>`;
                     document.querySelector('.msg').innerHTML += divChat
                 }
@@ -138,9 +144,9 @@ export const MainSocialMedia = ({ }) => {
 
             const response = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/saveMessage', {
                 method: 'post',
+                credentials: "include",
                 headers: {
                     "Content-Type": "Application/json",
-                    "Authorization": `bearer ${localStorage.getItem('tokenSocial')}`
                 },
                 body: JSON.stringify(msgSave)
             }).then((res) => res.json())
@@ -167,7 +173,7 @@ export const MainSocialMedia = ({ }) => {
     }
 
     /*en el metodo searchin buscamos a los usuarios para agregarlos en la lista de amigos*/
-    const searching = async(event) => {
+    const searching = async (event) => {
 
         event.preventDefault();
         const value = document.querySelector('.searchInput').value;
@@ -176,14 +182,14 @@ export const MainSocialMedia = ({ }) => {
 
             document.querySelector('.showOptions').setAttribute('show', 'true')
             try {
-                const listUsers = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/getListUsers',{
+                const listUsers = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/getListUsers', {
 
                     method: 'post',
-                    headers:{
-                        'Content-Type':'Application/json',
-                        'Authorization':`bearer ${localStorage.getItem('tokenSocial')}`
+                    credentials: "include",
+                    headers: {
+                        'Content-Type': 'Application/json',
                     },
-                    body: JSON.stringify({value, user})
+                    body: JSON.stringify({ value, user })
 
                 }).then((res) => res.json());
                 setListUsers(listUsers)
@@ -200,9 +206,9 @@ export const MainSocialMedia = ({ }) => {
             //console.log(contentSelect)
             const response = await fetch(`https://apisocialmedia-oesl.onrender.com/v1/social/getContent/${contentSelect}`, {
                 method: 'get',
+                credentials: "include",
                 headers: {
                     "Content-Type": "Application/json",
-                    "Authorization": `bearer ${localStorage.getItem('tokenSocial')}`
                 }
             }).then((res) => res.json());
             //console.log(response)
@@ -230,21 +236,43 @@ export const MainSocialMedia = ({ }) => {
         document.querySelector('.descrip').value = "";
     }
 
-    const logOut = () => {
+    const logOut = async() => {
         socket.send(JSON.stringify({
             "type": "logout",
             "name": user
         }));
+        const logoutRes = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/logout',{
+            method: 'get',
+            credentials: "include",
+            headers:{
+                "Content-Type":"Application/json"
+            }
+        }).then((res) => res.json());
 
-        localStorage.removeItem('tokenSocial');
-        localStorage.removeItem('socialUser');
-        localStorage.removeItem('socialImageUser');
-        navigate('/login')
+        if(logoutRes){
+            localStorage.removeItem('socialUser');
+            localStorage.removeItem('socialImageUser');
+            navigate('/login')
+        }
+        //localStorage.removeItem('tokenSocial');
     }
 
+    const validUser = useCallback(async() =>{
+        const login = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/validToken',{
+            method: "get",
+            credentials: 'include',
+            headers:{
+                "Content-Type":"Application/json"
+            }
+        }).then((res) =>res.json());
+        //console.log(login)
+        login === "Unauthorized" ? navigate('/login') : "";
+        setLogin(true)
+    },[])
+
     useEffect(() => {
-        const token = localStorage.getItem('tokenSocial')
-        token === null ? navigate('/login') : ""
+        validUser();
+        logUserStatus();
         getContent();
     }, [getContent])
 
@@ -293,8 +321,8 @@ export const MainSocialMedia = ({ }) => {
                     <section className='showOptions'>
                         <div className="optionsUser">
                             <ul className='containerListUsers'>
-                                {listUsers.map((element) =>{
-                                    return(
+                                {listUsers.map((element) => {
+                                    return (
                                         <li className='userList'>
                                             <section className='userShowData'>
                                                 <img src={element.image} alt="" />

@@ -1,6 +1,6 @@
 import '../styles/login.css';
 import eye from '../assets/eye.svg'
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 export const LoginComponent = ({ }) => {
@@ -16,26 +16,28 @@ export const LoginComponent = ({ }) => {
             password: event.target[1].value
         }
         
-        const token = await fetch('https://apisocialmedia-oesl.onrender.com/login',{
+        const loginR = await fetch('https://apisocialmedia-oesl.onrender.com/login',{
             method: 'post',
+            credentials: "include",
             headers:{
-                "Content-Type": "Application/json"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(data)
         }).then((res) => res.json())
         
         //console.log(token)
 
-        if(token != "F"){
+        if(loginR.login){
             const user = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/getUser',{
                 method: 'get',
+                credentials: 'include',
                 headers:{
                     "Content-Type": "Application/json",
-                    "Authorization": `bearer ${token}`
                 }
             }).then((res) => res.json());
             //console.log(user)
-            localStorage.setItem('tokenSocial', token);
+
+            //localStorage.setItem('tokenSocial', token);
             localStorage.setItem('socialUser', user.username);
             localStorage.setItem('socialImageUser', user.image);
             navigate('/SocialMedia')
@@ -44,12 +46,23 @@ export const LoginComponent = ({ }) => {
         }
     }
 
-    useEffect(() =>{
-        const token = localStorage.getItem('tokenSocial')
-        //console.log(token)
-        if(token != null){
+    const validUser = useCallback(async() =>{
+        const login = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/validToken',{
+            method: "get",
+            credentials: 'include',
+            headers:{
+                "Content-Type":"Application/json"
+            }
+        }).then((res) =>res.json());
+        console.log(login)
+        if(login != "Unauthorized"){
             navigate('/SocialMedia')
         }
+    },[])
+
+    useEffect(() =>{
+        //const token = localStorage.getItem('tokenSocial')
+        validUser()
     },[])
 
     return (
