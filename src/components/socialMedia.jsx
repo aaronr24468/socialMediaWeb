@@ -237,10 +237,12 @@ export const MainSocialMedia = ({ }) => {
     }
 
     const logOut = async() => {
+
         socket.send(JSON.stringify({
             "type": "logout",
             "name": user
         }));
+
         const logoutRes = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/logout',{
             method: 'get',
             credentials: "include",
@@ -248,8 +250,8 @@ export const MainSocialMedia = ({ }) => {
                 "Content-Type":"Application/json"
             }
         }).then((res) => res.json());
-
-        if(logoutRes){
+    
+        if(logoutRes.logout === true){
             localStorage.removeItem('socialUser');
             localStorage.removeItem('socialImageUser');
             navigate('/login')

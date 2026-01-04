@@ -24,6 +24,13 @@ export const Items = ({ content, contentSelect }) => {
         }
     }
 
+    const videoElement = () =>{
+        document.querySelectorAll('.videoItem').forEach((element) =>{
+            element.pause()
+        })
+        
+    }
+
     const showComments = (event) =>{
         console.log(document.getElementById('commentsContainer'))
         document.querySelector('.commentsContainer').classList.toggle('show')
@@ -83,7 +90,7 @@ export const Items = ({ content, contentSelect }) => {
 
                 {/* Video section */}
                 <section className='itemsBox showVideo' id='showVideoItem'>
-                    <li className='boxI'>
+                    <li className='boxI' onScroll={videoElement}>
                         {content.map((element, index) => {
                             return (
                                 <ul className='item' key={index}>

@@ -32,49 +32,69 @@
                 flex-direction: column;
                 box-shadow: 0 5px 5px black;
                 border-radius: 0 0 10px 10px;
+                padding: 3px;
 
                 .Options {
                     width: 100%;
-                    height: 100px;
+                    height: 100%;
                     padding: 10px;
                     display: flex;
+                    align-items: center;
+                    justify-content: center;
                     gap: 10px;
 
                     .imageUser {
                         width: 50%;
+                        height: 70px;
 
                         .photoProfile {
                             width: 100%;
-                            height: auto;
+                            height: 70px;
                             display: flex;
+                            align-items: center;
+                            justify-content: center;
                             padding: 5px 5px 5px 10px;
                             background: none;
                             border: none;
                             border-radius: 0 0 5px 0;
-                            box-shadow: 2px 2px 4px rgba(255, 255, 255, 0.351);
+                            box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.351);
                             cursor: pointer;
 
                             span {
                                 font-family: 'local';
                                 display: flex;
                                 align-items: center;
-                                gap: 10px;
+                                gap: 5px;
 
                                 .photoP {
-                                    width: 70px;
+                                    width: 60px;
                                     aspect-ratio: 1;
                                     object-fit: cover;
                                     border-radius: 50%;
+
+                                    @media (width <=910px) {
+                                        width: 40px;
+                                    }
+                                }
+
+                                @media (width <=910px) {
+                                    flex-direction: column;
+                                    font-size: 0.7rem;
                                 }
                             }
+
                         }
 
+
+                        @media (width <=1700px) {
+                            width: 100%;
+                        }
                     }
 
                     .uploadContent {
                         width: 50%;
-                        height: 100%;
-                        box-shadow: -2px 2px 4px rgba(255, 255, 255, 0.351);
+                        height: 70px;
+                        box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.351);
                         border-radius: 0 0 0 5px;
                         display: flex;
                         align-items: center;
@@ -83,7 +103,7 @@
                         gap: 15px;
 
                         .btnUpload {
-                            width: 40%;
+                            width: 60px;
                             aspect-ratio: 1;
                             border-radius: 10px;
                             background: none;
@@ -103,9 +123,36 @@
                             &:active {
                                 transform: scale(0.95);
                             }
+
+                            @media (width <=1700px) {
+                                width: 50px;
+                            }
+
+                            @media (width <=900px) {
+                                width: 40px;
+                            }
+                        }
+
+                        @media (width <=1700px) {
+                            width: 100%;
+                            height: 70px;
+                            gap: 15%;
+                        }
+
+                        @media (width <=900px) {
+                            gap: 10%;
+                        }
+                        @media (width <= 700px) {
+                            gap: 10%;
+                            height: 140px;
+                            flex-direction: column;
                         }
                     }
 
+
+                    @media (width <=1700px) {
+                        flex-direction: column;
+                    }
                 }
 
                 .listaOptions {
@@ -283,19 +330,21 @@
                             height: 100%;
                             display: flex;
                             align-items: center;
+
                             img {
                                 width: 30px;
                                 border-radius: 50%;
                             }
                         }
-                        .addSection{
+
+                        .addSection {
                             width: 50%;
                             height: 100%;
                             display: flex;
                             align-items: center;
                             justify-content: flex-end;
 
-                            .btnAddFriend{
+                            .btnAddFriend {
                                 width: 30px;
                                 aspect-ratio: 1;
                                 border: none;
@@ -304,15 +353,16 @@
                                 border-radius: 10px;
                                 cursor: pointer;
 
-                                &:hover{
+                                &:hover {
                                     box-shadow: inset 0 0 2px black,
-                                                0 0 5px black;
+                                        0 0 5px black;
                                 }
-                                &:active{
+
+                                &:active {
                                     transform: scale(0.95);
                                 }
 
-                                img{
+                                img {
                                     width: 20px;
                                     aspect-ratio: 1;
                                 }
@@ -363,12 +413,38 @@
                 background: rgba(255, 255, 255, 0.336);
                 cursor: pointer;
                 border-radius: 10px;
+                
 
                 img {
                     width: 50px;
                     aspect-ratio: 1;
                     object-fit: contain;
                     border-radius: 50%;
+
+                    @media (width <= 1050px){
+                        width: 35px;
+                    }
+
+                    @media (width <= 750px){
+                        width: 50px;
+                    }
+                }
+
+                @media (width <= 1050px){
+                    font-size: 0.8rem;
+                    height: 50px;
+                }
+
+                @media (width <= 900px){
+                    padding: 2px;
+                    justify-content: center;
+                }
+                @media (width <= 750px){
+                    color: transparent;
+                    font-size: 0.0000001rem;
+                    width: 50%;
+                    margin: 0 auto;
+                    background: none;
                 }
             }
         }
