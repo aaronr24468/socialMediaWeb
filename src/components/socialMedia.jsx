@@ -267,7 +267,7 @@ export const MainSocialMedia = ({ }) => {
                 "Content-Type":"Application/json"
             }
         }).then((res) =>res.json());
-        //console.log(login)
+        console.log(login)
         login === "Unauthorized" ? navigate('/login') : "";
         setLogin(true)
     },[])
