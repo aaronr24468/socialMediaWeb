@@ -260,15 +260,15 @@ export const MainSocialMedia = ({ }) => {
     }
 
     const validUser = useCallback(async() =>{
-        const login = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/validToken',{
+        const loginS = await fetch('https://apisocialmedia-oesl.onrender.com/v1/social/validToken',{
             method: "get",
             credentials: 'include',
             headers:{
                 "Content-Type":"Application/json"
             }
         }).then((res) =>res.json());
-        console.log(login)
-        login === "Unauthorized" ? navigate('/login') : "";
+        console.log(loginS, "socialMedia")
+        loginS === "Unauthorized" ? navigate('/login') : "";
         setLogin(true)
     },[])
 
