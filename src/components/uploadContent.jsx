@@ -23,8 +23,9 @@ export const UploadContent = ({ select, closeUpload }) => {
                 formData.append('video', video)
                 const response = await fetch(`https://apisocialmedia-oesl.onrender.com/v1/social/uploadVideo/${info}`, {
                     method: 'post',
+                    credentials: 'include',
                     headers: {
-                        "Authorization": `bearer ${token}`
+                        
                     },
                     body: formData
                 }).then((res) => res.json())
@@ -34,8 +35,9 @@ export const UploadContent = ({ select, closeUpload }) => {
                 formData.append('image', photo);
                 const response = await fetch(`https://apisocialmedia-oesl.onrender.com/v1/social/uploadPhoto/${info}`, {
                     method: 'post',
+                    credentials: 'include',
                     headers: {
-                        "Authorization": `bearer ${token}`
+                        
                     },
                     body: formData
                 }).then((res) => res.json())
