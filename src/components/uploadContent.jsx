@@ -67,6 +67,8 @@ export const UploadContent = ({ select, closeUpload }) => {
         } else if (nameFileArr.find((element) => element === "jpg" || nameFileArr.find((element) => element === "png"))) {
             setPhoto(event.target.files[0])
             setFlag('Photo')
+        }else{
+            alert("Este formato no esta permitido de momento")
         }
         document.getElementById('contentInformation').style.display = "flex"
         document.getElementById('selectContent').style.display = "none"
