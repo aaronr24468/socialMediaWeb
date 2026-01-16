@@ -15,6 +15,9 @@ Para probar la aplicación sin necesidad de registrarse, puedes usar las siguien
 ### Usuario estándar
 - Username: aaronr244
 - Password: MYGGsrn98
+- Username: sabanita18
+- Password: Sabanita18
+
 
 ## 🚧 Estado del Proyecto
 
