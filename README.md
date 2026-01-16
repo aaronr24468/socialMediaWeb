@@ -7,7 +7,14 @@ El frontend consume una API REST y gestiona la autenticación mediante cookies h
 ## 🚀 Demo en Producción
 
 - Frontend: https://prueba-login-y-register.web.app/login
-- Backend API: https://apisocialmedia-oesl.onrender.com
+
+## 🔑 Usuarios de prueba
+
+Para probar la aplicación sin necesidad de registrarse, puedes usar las siguientes credenciales:
+
+### Usuario estándar
+- Username: aaronr244
+- Password: MYGGsrn98
 
 ## 🚧 Estado del Proyecto
 
