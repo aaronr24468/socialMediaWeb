@@ -80,6 +80,12 @@ Próximas mejoras planeadas:
 - Organización de proyectos React
 - Comunicación segura con backend
 
+## 📷 Capturas
+<img width="1906" height="952" alt="image" src="https://github.com/user-attachments/assets/61a415eb-fcfe-4030-8533-764b0aefb793" />
+<img width="1907" height="950" alt="image" src="https://github.com/user-attachments/assets/4e664565-5d6f-4668-be4f-f275ba6c8661" />
+<img width="1906" height="952" alt="image" src="https://github.com/user-attachments/assets/6599b8aa-c6e7-4f56-8750-ab64c605a3b9" />
+
+
 ## ℹ️ Nota de Diseño
 
 Este proyecto fue desarrollado como una aplicación cerrada para un grupo reducido de usuarios.
